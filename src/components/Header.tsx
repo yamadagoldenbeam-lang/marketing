@@ -1,24 +1,49 @@
-export default function Header() {
+'use client'
+
+import { Sparkles, List } from 'lucide-react'
+
+interface HeaderProps {
+  currentIndex: number
+  total: number
+  onShowResults: () => void
+  showResults: boolean
+}
+
+export default function Header({ currentIndex, total, onShowResults, showResults }: HeaderProps) {
+  const progress = ((total - currentIndex) / total) * 100
+
   return (
-    <header className="bg-white shadow-sm">
-      <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-        <div className="flex justify-between items-center">
-          <div className="text-2xl font-bold text-blue-600">
-            Marketing Service
-          </div>
-          <div className="flex gap-6">
-            <a href="/" className="text-gray-600 hover:text-gray-900 transition-colors">
-              ホーム
-            </a>
-            <a href="/about" className="text-gray-600 hover:text-gray-900 transition-colors">
-              About
-            </a>
-            <a href="/contact" className="text-gray-600 hover:text-gray-900 transition-colors">
-              お問い合わせ
-            </a>
-          </div>
+    <header className="w-full max-w-md mx-auto">
+      {/* ロゴ＆トグルボタン */}
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center gap-2">
+          <Sparkles className="w-6 h-6 text-purple-500" />
+          <h1 className="text-xl font-black text-gray-800">
+            Discover<span className="text-purple-500">.</span>
+          </h1>
         </div>
-      </nav>
+        <button
+          onClick={onShowResults}
+          className={`p-2.5 rounded-xl transition-all ${
+            showResults 
+              ? 'bg-purple-500 text-white' 
+              : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+          }`}
+        >
+          <List className="w-5 h-5" />
+        </button>
+      </div>
+
+      {/* 進捗バー */}
+      <div className="relative h-1.5 bg-gray-200 rounded-full overflow-hidden">
+        <div 
+          className="absolute inset-y-0 left-0 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full transition-all duration-300"
+          style={{ width: `${progress}%` }}
+        />
+      </div>
+      <p className="text-xs text-gray-400 mt-2 text-center">
+        {currentIndex > 0 ? `残り ${currentIndex} サービス` : 'すべて完了！'}
+      </p>
     </header>
   )
 }
